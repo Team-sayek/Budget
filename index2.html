@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Budget - Web & Marketing</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f4f7fb;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark {
+      background: #1e272e;
+      color: #f1f2f6;
+    }
+    header {
+      background: linear-gradient(135deg, #4e73df, #1cc88a);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      position: relative;
+    }
+    header img.logo {
+      max-width: 120px;
+      height: auto;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .dark-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: white;
+      border-radius: 50%;
+      border: none;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.3s;
+    }
+    .dark-toggle:hover {
+      background: #ddd;
+    }
+    .card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+      background: #fff;
+    }
+    body.dark .card {
+      background: #2f3640;
+      color: #f5f6fa;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .budget-section {
+      padding: 60px 0;
+    }
+    .total-box {
+      background: #fff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      margin-top: 50px;
+    }
+    body.dark .total-box {
+      background: #2f3640;
+    }
+    .chart-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-top: 30px;
+    }
+    .progress {
+      height: 10px;
+      border-radius: 10px;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 20px;
+      margin-right: 10px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #1cc88a;
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+    footer {
+      background: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="Neon Green _T_ Logo Design.png" alt="Logo" class="logo">
+    <p>Website Development | Digital Marketing | Ad Shoot</p>
+    <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+  </header>
+
+  <div class="container budget-section" id="budgetContent">
+    <div class="row g-4">
+     
+      <!-- Website Development -->
+      <div class="col-md-4">
+        <div class="card p-4">
+          <h3 class="text-primary">Website Development</h3>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="web" data-amount="1200"><span class="slider"></span></label> UI/UX Design: <strong>₹1200</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="web" data-amount="2000"><span class="slider"></span></label> Frontend Development: <strong>₹2000</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="web" data-amount="5000"><span class="slider"></span></label> Backend Integration: <strong>₹5000</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="web" data-amount="1800"><span class="slider"></span></label> Hosting & Domain: <strong>₹1800</strong></li>
+          </ul>
+          <div class="mt-3 fw-bold">Total: ₹<span id="webTotal">0</span></div>
+          <div class="progress"><div id="webProgress" class="progress-bar bg-primary" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <!-- Digital Marketing -->
+      <div class="col-md-4">
+        <div class="card p-4">
+          <h3 class="text-success">Digital Marketing</h3>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="marketing" data-amount="500"><span class="slider"></span></label> SEO Setup: <strong>₹500</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="marketing" data-amount="1200"><span class="slider"></span></label> Social Media Marketing: <strong>₹1200</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="marketing" data-amount="800"><span class="slider"></span></label> Google Ads: <strong>₹800</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="marketing" data-amount="300"><span class="slider"></span></label> Email Campaigns: <strong>₹300</strong></li>
+          </ul>
+          <div class="mt-3 fw-bold">Total: ₹<span id="marketingTotal">0</span></div>
+          <div class="progress"><div id="marketingProgress" class="progress-bar bg-success" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <!-- Ad Shoot -->
+      <div class="col-md-4">
+        <div class="card p-4">
+          <h3 class="text-danger">Ad Shoot</h3>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="adshoot" data-amount="400"><span class="slider"></span></label> Script & Storyboarding: <strong>₹400</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="adshoot" data-amount="800"><span class="slider"></span></label> Production Crew: <strong>₹800</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="adshoot" data-amount="800"><span class="slider"></span></label> Editing & Post-Production: <strong>₹800</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="adshoot" data-amount="1000"><span class="slider"></span></label> Equipment & Studio: <strong>₹1000</strong></li>
+          </ul>
+          <div class="mt-3 fw-bold">Total: ₹<span id="adshootTotal">0</span></div>
+          <div class="progress"><div id="adshootProgress" class="progress-bar bg-danger" style="width:0%"></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Grand Total + Charts -->
+    <div class="total-box">
+      <h2 class="fw-bold">Grand Total: ₹<span id="grandTotal">0</span></h2>
+      <div class="chart-container">
+        <canvas id="budgetPieChart"></canvas>
+        <canvas id="budgetBarChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export Buttons -->
+  <div class="export-buttons">
+    <button class="btn btn-primary" onclick="downloadPDF()">Download PDF</button>
+    <button class="btn btn-success" onclick="downloadExcel()">Download Excel</button>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Team7Services. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    const services = document.querySelectorAll('.service');
+    const totals = { web: 0, marketing: 0, adshoot: 0 };
+    const maxTotals = { web: 10000, marketing: 2800, adshoot: 3000 };
+
+    // Charts setup
+    const ctxPie = document.getElementById('budgetPieChart');
+    const ctxBar = document.getElementById('budgetBarChart');
+
+    let pieChart = new Chart(ctxPie, {
+      type: 'pie',
+      data: {
+        labels: ['Website Development', 'Digital Marketing', 'Ad Shoot'],
+        datasets: [{
+          data: [0, 0, 0],
+          backgroundColor: ['#4e73df', '#1cc88a', '#e74a3b']
+        }]
+      }
+    });
+
+    let barChart = new Chart(ctxBar, {
+      type: 'bar',
+      data: {
+        labels: ['Website Development', 'Digital Marketing', 'Ad Shoot'],
+        datasets: [{
+          label: 'Budget (₹)',
+          data: [0, 0, 0],
+          backgroundColor: ['#4e73df', '#1cc88a', '#e74a3b']
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+
+    function animateValue(id, start, end, duration) {
+      const obj = document.getElementById(id);
+      let startTime = null;
+      function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        obj.textContent = Math.floor(progress * (end - start) + start);
+        if (progress < 1) window.requestAnimationFrame(step);
+      }
+      window.requestAnimationFrame(step);
+    }
+
+    function updateTotals() {
+      totals.web = totals.marketing = totals.adshoot = 0;
+      let grandTotal = 0;
+
+      services.forEach(service => {
+        if (service.checked) {
+          const amount = parseInt(service.dataset.amount);
+          const category = service.dataset.category;
+          totals[category] += amount;
+          grandTotal += amount;
+        }
+      });
+
+      animateValue('webTotal', parseInt(document.getElementById('webTotal').textContent), totals.web, 500);
+      animateValue('marketingTotal', parseInt(document.getElementById('marketingTotal').textContent), totals.marketing, 500);
+      animateValue('adshootTotal', parseInt(document.getElementById('adshootTotal').textContent), totals.adshoot, 500);
+      animateValue('grandTotal', parseInt(document.getElementById('grandTotal').textContent), grandTotal, 500);
+
+      document.getElementById('webProgress').style.width = (totals.web / maxTotals.web * 100) + '%';
+      document.getElementById('marketingProgress').style.width = (totals.marketing / maxTotals.marketing * 100) + '%';
+      document.getElementById('adshootProgress').style.width = (totals.adshoot / maxTotals.adshoot * 100) + '%';
+
+      pieChart.data.datasets[0].data = [totals.web, totals.marketing, totals.adshoot];
+      pieChart.update();
+
+      barChart.data.datasets[0].data = [totals.web, totals.marketing, totals.adshoot];
+      barChart.update();
+    }
+
+    services.forEach(service => service.addEventListener('change', updateTotals));
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+    }
+
+    // Export PDF
+    async function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const content = document.getElementById("budgetContent");
+      await html2canvas(content).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF("p", "mm", "a4");
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, "PNG", 0, 10, pdfWidth, pdfHeight);
+        pdf.save("budget-report.pdf");
+      });
+    }
+
+    // Export Excel
+    function downloadExcel() {
+      const wb = XLSX.utils.book_new();
+      const wsData = [
+        ["Category", "Amount (₹)"],
+        ["Website Development", totals.web],
+        ["Digital Marketing", totals.marketing],
+        ["Ad Shoot", totals.adshoot],
+        ["Grand Total", parseInt(document.getElementById('grandTotal').textContent)]
+      ];
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+      XLSX.utils.book_append_sheet(wb, ws, "Budget");
+      XLSX.writeFile(wb, "budget-report.xlsx");
+    }
+  </script>
+
+</body>
+</html>
