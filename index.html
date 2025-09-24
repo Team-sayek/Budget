@@ -13,14 +13,14 @@
     body {
       font-family: 'Poppins', sans-serif;
       background: #f4f7fb;
-      transition: background 0.3s, color 0.3s;
+      transition: background 0.5s, color 0.5s;
     }
     body.dark {
-      background: #1e272e;
+      background: #12181d;
       color: #f1f2f6;
     }
     header {
-      background: linear-gradient(135deg, #4e73df, #1cc88a);
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
       color: white;
       padding: 40px 20px;
       text-align: center;
@@ -52,15 +52,20 @@
       border: none;
       border-radius: 15px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       background: #fff;
     }
     body.dark .card {
-      background: #2f3640;
+      background: #1e272e;
       color: #f5f6fa;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
     .card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    body.dark .card:hover {
+      box-shadow: 0 10px 20px rgba(0,0,0,0.7);
     }
     .budget-section {
       padding: 60px 0;
@@ -72,9 +77,10 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       text-align: center;
       margin-top: 50px;
+      transition: background 0.5s;
     }
     body.dark .total-box {
-      background: #2f3640;
+      background: #1e272e;
     }
     .chart-container {
       display: flex;
@@ -127,6 +133,22 @@
     input:checked + .slider:before {
       transform: translateX(20px);
     }
+    .export-buttons .btn {
+      background: linear-gradient(45deg, #4e73df, #20b2aa);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 50px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .export-buttons .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .export-buttons {
+      text-align: center;
+      margin-top: 40px;
+    }
     footer {
       background: #2c3e50;
       color: white;
@@ -147,54 +169,76 @@
   <div class="container budget-section" id="budgetContent">
     <div class="row g-4">
      
-      <!-- Website Development -->
       <div class="col-md-4">
         <div class="card p-4">
-          <h3 class="text-primary">Website Development</h3>
+          <h3 class="text-primary">💻 Website Development</h3>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="web" data-amount="1200"><span class="slider"></span></label> UI/UX Design: <strong>₹1200</strong></li>
-            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="web" data-amount="2000"><span class="slider"></span></label> Frontend Development: <strong>₹2000</strong></li>
-            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="web" data-amount="5000"><span class="slider"></span></label> Backend Integration: <strong>₹5000</strong></li>
-            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="web" data-amount="1800"><span class="slider"></span></label> Hosting & Domain: <strong>₹1800</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="web" data-amount="6000"><span class="slider"></span></label> Basic Website (3–5 pages, template-based): <strong>₹6000</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="web" data-amount="15000"><span class="slider"></span></label> Custom Business Website (CMS, integrations, responsive): <strong>₹15000</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="web" data-amount="45000"><span class="slider"></span></label> E-commerce Website (payment gateway, catalog): <strong>₹45000</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="web" data-amount="3500"><span class="slider"></span></label> Website Maintenance (monthly retainer): <strong>₹3500</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="web" data-amount="500"><span class="slider"></span></label> Logo Design: <strong>₹500</strong></li>
           </ul>
           <div class="mt-3 fw-bold">Total: ₹<span id="webTotal">0</span></div>
           <div class="progress"><div id="webProgress" class="progress-bar bg-primary" style="width:0%"></div></div>
         </div>
       </div>
 
-      <!-- Digital Marketing -->
       <div class="col-md-4">
         <div class="card p-4">
-          <h3 class="text-success">Digital Marketing</h3>
+          <h3 class="text-success">📈 Digital Marketing</h3>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="marketing" data-amount="500"><span class="slider"></span></label> SEO Setup: <strong>₹500</strong></li>
-            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="marketing" data-amount="1200"><span class="slider"></span></label> Social Media Marketing: <strong>₹1200</strong></li>
-            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="marketing" data-amount="800"><span class="slider"></span></label> Google Ads: <strong>₹800</strong></li>
-            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="marketing" data-amount="300"><span class="slider"></span></label> Email Campaigns: <strong>₹300</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="marketing" data-amount="500"><span class="slider"></span></label> SEO (Search Engine Optimization, per month): <strong>₹500</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="marketing" data-amount="2200"><span class="slider"></span></label> Social Media Management (content + creatives + posting): <strong>₹2200</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="marketing" data-amount="1200"><span class="slider"></span></label> Performance Marketing (Google/Facebook Ads): <strong>₹1200</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="marketing" data-amount="300"><span class="slider"></span></label> Email Marketing Campaigns: <strong>₹300</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="marketing" data-amount="300"><span class="slider"></span></label> Social Media Creatives (per post): <strong>₹300</strong></li>
           </ul>
           <div class="mt-3 fw-bold">Total: ₹<span id="marketingTotal">0</span></div>
           <div class="progress"><div id="marketingProgress" class="progress-bar bg-success" style="width:0%"></div></div>
         </div>
       </div>
 
-      <!-- Ad Shoot -->
       <div class="col-md-4">
         <div class="card p-4">
-          <h3 class="text-danger">Ad Shoot</h3>
+          <h3 class="text-danger">🎥 Ad Shoot</h3>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="adshoot" data-amount="400"><span class="slider"></span></label> Script & Storyboarding: <strong>₹400</strong></li>
-            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="adshoot" data-amount="800"><span class="slider"></span></label> Production Crew: <strong>₹800</strong></li>
-            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="adshoot" data-amount="800"><span class="slider"></span></label> Editing & Post-Production: <strong>₹800</strong></li>
-            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="adshoot" data-amount="1000"><span class="slider"></span></label> Equipment & Studio: <strong>₹1000</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="adshoot" data-amount="500"><span class="slider"></span></label> Product / Food Photography (10–20 products): <strong>₹500 per product</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="adshoot" data-amount="3000"><span class="slider"></span></label> Corporate/Brand Video (1–3 mins, basic shoot): <strong>₹3000 per video</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="adshoot" data-amount="15000"><span class="slider"></span></label> High-End Commercial Shoot (actors, locations, equipment): <strong>₹15000</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="adshoot" data-amount="500"><span class="slider"></span></label> Short Social Media Ads (Reels, TikTok-style): <strong>₹500 per video</strong></li>
           </ul>
           <div class="mt-3 fw-bold">Total: ₹<span id="adshootTotal">0</span></div>
           <div class="progress"><div id="adshootProgress" class="progress-bar bg-danger" style="width:0%"></div></div>
         </div>
       </div>
-
+      
+      <div class="col-md-4">
+        <div class="card p-4">
+          <h3 class="text-info">📄 Brochure & Pamplet</h3>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="brochure" data-amount="500"><span class="slider"></span></label> Custom Illustration (brochure & pamplet): <strong>₹500</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="brochure" data-amount="300"><span class="slider"></span></label> Detailed Illustration (posters): <strong>₹300</strong></li>
+          </ul>
+          <div class="mt-3 fw-bold">Total: ₹<span id="brochureTotal">0</span></div>
+          <div class="progress"><div id="brochureProgress" class="progress-bar bg-info" style="width:0%"></div></div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card p-4">
+          <h3 class="text-warning">🤝 Business Consultancy</h3>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="consultancy" data-amount="200"><span class="slider"></span></label> Business/Marketing Consulting (Hourly): <strong>₹200</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="consultancy" data-amount="1000"><span class="slider"></span></label> Monthly Retainer: <strong>₹1000</strong></li>
+            <li class="list-group-item"><label class="switch"><input type="checkbox" class="service" data-category="consultancy" data-amount="20000"><span class="slider"></span></label> Full Strategy Project (one-time): <strong>₹20000</strong></li>
+          </ul>
+          <div class="mt-3 fw-bold">Total: ₹<span id="consultancyTotal">0</span></div>
+          <div class="progress"><div id="consultancyProgress" class="progress-bar bg-warning" style="width:0%"></div></div>
+        </div>
+      </div>
     </div>
 
-    <!-- Grand Total + Charts -->
     <div class="total-box">
       <h2 class="fw-bold">Grand Total: ₹<span id="grandTotal">0</span></h2>
       <div class="chart-container">
@@ -204,7 +248,6 @@
     </div>
   </div>
 
-  <!-- Export Buttons -->
   <div class="export-buttons">
     <button class="btn btn-primary" onclick="downloadPDF()">Download PDF</button>
     <button class="btn btn-success" onclick="downloadExcel()">Download Excel</button>
@@ -216,8 +259,8 @@
 
   <script>
     const services = document.querySelectorAll('.service');
-    const totals = { web: 0, marketing: 0, adshoot: 0 };
-    const maxTotals = { web: 10000, marketing: 2800, adshoot: 3000 };
+    const totals = { web: 0, marketing: 0, adshoot: 0, brochure: 0, consultancy: 0 };
+    const maxTotals = { web: 70000, marketing: 4500, adshoot: 19000, brochure: 1000, consultancy: 21200 };
 
     // Charts setup
     const ctxPie = document.getElementById('budgetPieChart');
@@ -226,10 +269,10 @@
     let pieChart = new Chart(ctxPie, {
       type: 'pie',
       data: {
-        labels: ['Website Development', 'Digital Marketing', 'Ad Shoot'],
+        labels: ['Web Development', 'Digital Marketing', 'Ad Shoot', 'Brochure & Pamplet', 'Business Consultancy'],
         datasets: [{
-          data: [0, 0, 0],
-          backgroundColor: ['#4e73df', '#1cc88a', '#e74a3b']
+          data: [0, 0, 0, 0, 0],
+          backgroundColor: ['#4e73df', '#1cc88a', '#e74a3b', '#36b9cc', '#f6c23e']
         }]
       }
     });
@@ -237,11 +280,11 @@
     let barChart = new Chart(ctxBar, {
       type: 'bar',
       data: {
-        labels: ['Website Development', 'Digital Marketing', 'Ad Shoot'],
+        labels: ['Web Development', 'Digital Marketing', 'Ad Shoot', 'Brochure & Pamplet', 'Business Consultancy'],
         datasets: [{
           label: 'Budget (₹)',
-          data: [0, 0, 0],
-          backgroundColor: ['#4e73df', '#1cc88a', '#e74a3b']
+          data: [0, 0, 0, 0, 0],
+          backgroundColor: ['#4e73df', '#1cc88a', '#e74a3b', '#36b9cc', '#f6c23e']
         }]
       },
       options: { responsive: true, plugins: { legend: { display: false } } }
@@ -260,7 +303,12 @@
     }
 
     function updateTotals() {
-      totals.web = totals.marketing = totals.adshoot = 0;
+      // Reset all totals to zero to recalculate from a clean slate
+      totals.web = 0;
+      totals.marketing = 0;
+      totals.adshoot = 0;
+      totals.brochure = 0;
+      totals.consultancy = 0;
       let grandTotal = 0;
 
       services.forEach(service => {
@@ -275,16 +323,20 @@
       animateValue('webTotal', parseInt(document.getElementById('webTotal').textContent), totals.web, 500);
       animateValue('marketingTotal', parseInt(document.getElementById('marketingTotal').textContent), totals.marketing, 500);
       animateValue('adshootTotal', parseInt(document.getElementById('adshootTotal').textContent), totals.adshoot, 500);
+      animateValue('brochureTotal', parseInt(document.getElementById('brochureTotal').textContent), totals.brochure, 500);
+      animateValue('consultancyTotal', parseInt(document.getElementById('consultancyTotal').textContent), totals.consultancy, 500);
       animateValue('grandTotal', parseInt(document.getElementById('grandTotal').textContent), grandTotal, 500);
 
       document.getElementById('webProgress').style.width = (totals.web / maxTotals.web * 100) + '%';
       document.getElementById('marketingProgress').style.width = (totals.marketing / maxTotals.marketing * 100) + '%';
       document.getElementById('adshootProgress').style.width = (totals.adshoot / maxTotals.adshoot * 100) + '%';
+      document.getElementById('brochureProgress').style.width = (totals.brochure / maxTotals.brochure * 100) + '%';
+      document.getElementById('consultancyProgress').style.width = (totals.consultancy / maxTotals.consultancy * 100) + '%';
 
-      pieChart.data.datasets[0].data = [totals.web, totals.marketing, totals.adshoot];
+      pieChart.data.datasets[0].data = [totals.web, totals.marketing, totals.adshoot, totals.brochure, totals.consultancy];
       pieChart.update();
 
-      barChart.data.datasets[0].data = [totals.web, totals.marketing, totals.adshoot];
+      barChart.data.datasets[0].data = [totals.web, totals.marketing, totals.adshoot, totals.brochure, totals.consultancy];
       barChart.update();
     }
 
@@ -314,9 +366,11 @@
       const wb = XLSX.utils.book_new();
       const wsData = [
         ["Category", "Amount (₹)"],
-        ["Website Development", totals.web],
+        ["Web Development", totals.web],
         ["Digital Marketing", totals.marketing],
         ["Ad Shoot", totals.adshoot],
+        ["Brochure & Pamplet", totals.brochure],
+        ["Business Consultancy", totals.consultancy],
         ["Grand Total", parseInt(document.getElementById('grandTotal').textContent)]
       ];
       const ws = XLSX.utils.aoa_to_sheet(wsData);
